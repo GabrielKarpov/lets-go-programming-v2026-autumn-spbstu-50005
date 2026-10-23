@@ -23,7 +23,8 @@ type DepartmentTemperatureRange struct {
 }
 
 func New() *DepartmentTemperatureRange {
-	return &DepartmentTemperatureRange{lowestTemperature: minimumTemperature,
+	return &DepartmentTemperatureRange{
+		lowestTemperature:  minimumTemperature,
 		highestTemperature: maximumTemperature,
 	}
 }
@@ -40,8 +41,9 @@ func (t *DepartmentTemperatureRange) ChangeTemperatures(inputTemperature int,
 			t.lowestTemperature = inputTemperature
 		}
 	default:
-		return fmt.Errorf("Invalid sign %s: %w", sign, ErrInvalidSign)
+		return fmt.Errorf("invalid sign %s: %w", sign, ErrInvalidSign)
 	}
+
 	return nil
 }
 
@@ -49,41 +51,58 @@ func (t *DepartmentTemperatureRange) calculateOptimalTemperature() int {
 	if t.highestTemperature < t.lowestTemperature {
 		return -1
 	}
+
 	return t.lowestTemperature
 }
 
 func main() {
 	var departmentsNumber int
+
 	if _, err := fmt.Scan(&departmentsNumber); err != nil {
-		fmt.Fprintln(os.Stderr, "Error: invalid departments number:", err)
+		fmt.Fprintln(os.Stderr, "invalid departments number:", err)
+
 		return
 	}
+
 	if departmentsNumber < 1 {
-		fmt.Fprintln(os.Stderr, "Error: departments number must be positive")
+		fmt.Fprintln(os.Stderr, "departments number must be positive")
+
 		return
 	}
-	for i := 0; i < departmentsNumber; i++ {
+
+	for range departmentsNumber {
 		var headcount int
+
 		if _, err := fmt.Scan(&headcount); err != nil {
-			fmt.Fprintln(os.Stderr, "Error: invalid headcount:", err)
+			fmt.Fprintln(os.Stderr, "invalid headcount:", err)
+
 			return
 		}
+
 		if headcount < 1 {
-			fmt.Fprintln(os.Stderr, "Error: headcount must be positive")
+			fmt.Fprintln(os.Stderr, "headcount must be positive")
+
 			return
 		}
+
 		temperatureRange := New()
-		for j := 0; j < headcount; j++ {
+
+		for range headcount {
 			var sign string
 			var temperature int
+
 			if _, err := fmt.Scan(&sign, &temperature); err != nil {
-				fmt.Fprintln(os.Stderr, "Error: invalid Input:", err)
+				fmt.Fprintln(os.Stderr, "invalid Input:", err)
+
 				return
 			}
+
 			if err := temperatureRange.ChangeTemperatures(temperature, sign); err != nil {
 				fmt.Fprintln(os.Stderr, "Error:", err)
+
 				return
 			}
+
 			fmt.Println(temperatureRange.calculateOptimalTemperature())
 		}
 	}
