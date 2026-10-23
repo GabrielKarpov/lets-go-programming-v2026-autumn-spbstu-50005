@@ -13,9 +13,7 @@ const (
 	greaterOrEqual     = ">="
 )
 
-var (
-	ErrInvalidSign = errors.New("invalid sign")
-)
+var ErrInvalidSign = errors.New("invalid sign")
 
 type DepartmentTemperatureRange struct {
 	lowestTemperature  int
@@ -29,8 +27,10 @@ func New() *DepartmentTemperatureRange {
 	}
 }
 
-func (t *DepartmentTemperatureRange) ChangeTemperatures(inputTemperature int,
-	sign string) error {
+func (t *DepartmentTemperatureRange) ChangeTemperatures(
+	inputTemperature int,
+	sign string,
+) error {
 	switch sign {
 	case lessOrEqual:
 		if inputTemperature < t.highestTemperature {
@@ -88,8 +88,10 @@ func main() {
 		temperatureRange := New()
 
 		for range headcount {
-			var sign string
-			var temperature int
+			var (
+				sign        string
+				temperature int
+			)
 
 			if _, err := fmt.Scan(&sign, &temperature); err != nil {
 				fmt.Fprintln(os.Stderr, "invalid Input:", err)
